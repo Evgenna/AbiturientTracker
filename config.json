@@ -1,0 +1,17 @@
+{
+  "Uid": "1532487",
+  "Majors": [
+    {
+      "id": "625685a8-0c88-11f1-8e3e-0050569263a5",
+      "Campaign": "postal"
+    },
+    {
+      "id": "d741de18-0ca0-11f1-8e3e-0050569263a5",
+      "Campaign": "postal"
+    },
+    {
+      "id": "5f017b2a-0ca5-11f1-8e3e-0050569263a5",
+      "Campaign": "postal"
+    }
+  ]
+}
