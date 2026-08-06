@@ -1,12 +1,18 @@
+using System.Text.Json.Serialization;
+
 using Majors;
 
 namespace Abiturients
 {
     public class AbiturientResponse
     {
+        [JsonPropertyName("sspvo_unique_code")]
         public string Uid { get; set; } = string.Empty;
+        [JsonPropertyName("rating")]
         public int Rating { get; set; }
+        [JsonPropertyName("has_agreement")]
         public bool HasAgreement { get; set; }
-        public List<MajorPriority> MajorPriorities { get; set; } = [];
+        [JsonPropertyName("priority")]
+        public int Priority { get; set; }
     }
 }

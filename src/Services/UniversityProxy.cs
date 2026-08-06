@@ -75,10 +75,10 @@ namespace University
             return majorList;
         }
 
-        public async Task<UniversityData> GetAbiturients()
+        public async Task<List<UniversityData>> GetAbiturients()
         {
-            var abiturientList = new Dictionary<string, Abiturient>();
-            var majorList = new List<MajorDetails>();
+            var abiturientList = new List<AbiturientResponse>();
+            var universityData = new List<UniversityData>();
 
             foreach (var major in _settingsConfiguration.Majors)
             {
@@ -89,40 +89,20 @@ namespace University
                 var contestGroup = json.RootElement.GetProperty("contest_group");
 
                 var majorDetail = contestGroup.Deserialize<MajorDetails>();
-                majorList.Add(majorDetail! with
-                {
-                    Campaign = major.Campaign
-                });
 
-                foreach (var item in contestGroup
-                    .GetProperty("abiturients")
-                    .EnumerateArray())
-                {
-                    string id = item.GetProperty("sspvo_unique_code").GetString()!;
-                    int priority = item.GetProperty("priority").GetInt32();
+                var abiturients = contestGroup.GetProperty("abiturients").Deserialize<List<AbiturientResponse>>();
+                if(abiturients == null) continue;
 
-                    if (!abiturientList.TryGetValue(id, out var abiturient))
+                abiturientList.AddRange(abiturients);
+
+                universityData.Add(new UniversityData(
+                    majorDetail! with
                     {
-                        abiturient = new Abiturient
-                        {
-                            Uid = id,
-                            Rating = item.GetProperty("rating").GetInt32(),
-                            HasAgreement = item.GetProperty("has_agreement").GetBoolean()
-                        };
-
-                        abiturientList.Add(id, abiturient);
-                    }
-
-                    abiturient.MajorPriorities.Add(
-                        new MajorPriority(major.Id, major.Name, priority));
-                }
+                        Campaign = major.Campaign
+                    },
+                    abiturientList.OrderByDescending(a => a.Rating).ToList()
+                ));
             }
-
-            UniversityData universityData = new(
-                majorList,
-                [.. abiturientList.Values.OrderByDescending(a => a.Rating)]
-            );
-
             return universityData;
         }
     }
