@@ -9,7 +9,7 @@ namespace Majors
         [JsonPropertyName("direction")]
         public string Name { get; set; } = string.Empty;
         public string Campaign { get; set; } = string.Empty;
-        [JsonPropertyName("budget_places")]
+        [JsonPropertyName("places")]
         public int Places { get; set; }
     }
 }
