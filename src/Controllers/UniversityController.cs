@@ -20,7 +20,7 @@ namespace University
         public async Task<IActionResult> GetAbiturients()
         {
             var abiturientList = await _universityProxy.GetAbiturients();
-            var abiturients = _distributionService.Prepare(abiturientList);
+            var abiturients = DistributionService.Prepare(abiturientList);
             return Ok(abiturients);
         }
     }
