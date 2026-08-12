@@ -5,73 +5,60 @@ using University;
 
 namespace Statistics
 {
-    public class StatisticsService(
-        UniversityProxy universityProxy,
-        SettingsService settingsService
-        )
+    public class StatisticsService()
     {
-        private UniversityProxy _universityProxy = universityProxy;
-        private SettingsService _settingsService = settingsService;
 
-        public async Task<MyStatistics> GetMyStatistics(List<Abiturient> _abiturients)
+        public MyStatistics GetMyStatistics(string myId, List<Abiturient> _abiturients)
         {
-            var myData = await _settingsService.LoadAsync();
-            string myId = myData.Uid;
-
             int place = _abiturients.FindIndex(a => a.Uid == myId);
             string currentMajor = "";
             string agreementMajor = "";
-            int withAgreement = _abiturients.Slice(0, place).Count(a => a.HasAgreement);
-            int withoutAgreement = _abiturients.Slice(0, place).Count(a => !a.HasAgreement);
+            var abiturientsForward = _abiturients.Slice(0, place).ToList();
+            int withAgreement = abiturientsForward.Count(a => a.HasAgreement);
+            int withoutAgreement = abiturientsForward.Count(a => !a.HasAgreement);
 
             return new MyStatistics(
-                place,
+                place + 1,
                 currentMajor,
                 agreementMajor,
                 withAgreement,
-                withAgreement
+                withoutAgreement
             );
         }
 
-        public async Task<List<MajorStatistics>> GetMajorStatistics(List<MajorDetails> _majors, List<Abiturient> _abiturients)
+        public List<MajorStatistics> GetMajorStatistics(List<UniversityData> universityData)
         {
-            var majorStatistics = new List<MajorStatistics>();
+            List<MajorStatistics> majorStatistics = [];
 
-            foreach (MajorDetails major in _majors)
+            foreach (var data in universityData)
             {
-                
-                var majorInfo = new MajorStatistics(
-                    major,
-                    major.Places,
-                    1,
-                    1,
-                    1,
-                    1,
-                    1
-                );
+                MajorDetails major = data.Major;
+                List<AbiturientResponse> abiturients = data.Abiturients;
+                int abiturientCount = abiturients.Count();
+                int agreementCount = abiturients.Count(a => a.HasAgreement);
+                double contest = abiturientCount / major.Places;
 
-                majorStatistics.Add(majorInfo);
+                majorStatistics.Add(new MajorStatistics(
+                    major,
+                    abiturientCount,
+                    agreementCount,
+                    contest,
+                    0,
+                    0
+                ));
             }
 
             return majorStatistics;
         }
 
-        public async Task<StatisticsResponse> GetStatistics()
+        public StatisticsResponse GetStatistics(string myId, List<UniversityData> universityData)
         {
-            var _data = await _universityProxy.GetAbiturients();
-            var _abiturients = _data.Abiturients;
-            var _majors = _data.Majors;
 
-            int totalCount = _abiturients.Count;
-            int agreementCount = _abiturients.Count(a => a.HasAgreement);
-
-            MyStatistics myStatistics = await GetMyStatistics(_abiturients);
-
-            List<MajorStatistics> majorStatistics = await GetMajorStatistics(_majors, _abiturients);
-
+            MyStatistics myStatistics = GetMyStatistics(myId, DistributionService.Prepare(universityData));
+            List<MajorStatistics> majorStatistics = GetMajorStatistics(universityData);
             return new StatisticsResponse(
-                totalCount, 
-                agreementCount,
+                0,
+                0,
                 myStatistics,
                 majorStatistics
             );

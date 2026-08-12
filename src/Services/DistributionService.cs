@@ -5,7 +5,7 @@ namespace Abiturients
 {
     public class DistributionService
     {
-        public List<Abiturient> Prepare(List<UniversityData> universityData)
+        public static List<Abiturient> Prepare(List<UniversityData> universityData)
         {
             var abiturients = new Dictionary<string, Abiturient>();
             
