@@ -1,12 +1,14 @@
+using Abiturients;
 using Microsoft.AspNetCore.Mvc;
 
 namespace University
 {
     [ApiController]
     [Route("[controller]")]
-    public class UniversityController(UniversityProxy universityProxy) : ControllerBase
+    public class UniversityController(UniversityProxy universityProxy, DistributionService distributionService) : ControllerBase
     {
         private readonly UniversityProxy _universityProxy = universityProxy;
+        private readonly DistributionService _distributionService = distributionService;
 
         [HttpGet("majors")]
         public async Task<IActionResult> GetMajors()
@@ -15,9 +17,10 @@ namespace University
             return Ok(majors);
         }
         [HttpGet("abiturients")]
-        public async Task<IActionResult> GetAbirurients()
+        public async Task<IActionResult> GetAbiturients()
         {
-            var abiturients = await _universityProxy.GetAbiturients();
+            var abiturientList = await _universityProxy.GetAbiturients();
+            var abiturients = _distributionService.Prepare(abiturientList);
             return Ok(abiturients);
         }
     }

@@ -26,7 +26,6 @@ namespace University
 
             if (_universityConfiguration.UseTestData)
             {
-                Console.WriteLine("Запрос из тестового окружения");
                 var path = Path.Combine(
                     AppContext.BaseDirectory,
                     _universityConfiguration.TestDataPath,
@@ -36,7 +35,6 @@ namespace University
             }
             else
             {
-                Console.WriteLine("Отправлен внешний запрос");
                 json = (await _memoryCache.GetOrCreateAsync(link, async entry =>
                 {
                     entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(30);
@@ -77,7 +75,6 @@ namespace University
 
         public async Task<List<UniversityData>> GetAbiturients()
         {
-            var abiturientList = new List<AbiturientResponse>();
             var universityData = new List<UniversityData>();
 
             foreach (var major in _settingsConfiguration.Majors)
@@ -93,14 +90,12 @@ namespace University
                 var abiturients = contestGroup.GetProperty("abiturients").Deserialize<List<AbiturientResponse>>();
                 if(abiturients == null) continue;
 
-                abiturientList.AddRange(abiturients);
-
                 universityData.Add(new UniversityData(
                     majorDetail! with
                     {
                         Campaign = major.Campaign
                     },
-                    abiturientList.OrderByDescending(a => a.Rating).ToList()
+                    abiturients.OrderByDescending(a => a.Rating).ToList()
                 ));
             }
             return universityData;

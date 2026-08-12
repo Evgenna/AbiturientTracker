@@ -1,6 +1,7 @@
 using University;
 using Settings;
 using Statistics;
+using Abiturients;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +24,7 @@ builder.Services.AddHttpClient();
 builder.Services.AddScoped<UniversityProxy>();
 builder.Services.AddScoped<SettingsService>();
 builder.Services.AddScoped<StatisticsService>();
+builder.Services.AddScoped<DistributionService>();
 
 
 builder.Services.AddControllers();
