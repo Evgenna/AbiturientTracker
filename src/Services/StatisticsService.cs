@@ -38,8 +38,8 @@ namespace Statistics
                 double contest = (double)abiturientCount / major.Places;
 
                 // Проходные баллы для специальности по основному и проходному приоритетам
-                int agreementPassingScore = abiturientList.Where(a => a.AgreementMajor == major.Name).Select(a => a.Rating).DefaultIfEmpty(0).Min();
-                int currentPassingScore = abiturientList.Where(a => a.CurrentMajor == major.Name).Select(a => a.Rating).DefaultIfEmpty(0).Min();
+                int agreementPassingScore = abiturientList.Where(a => a.AgreementMajor == major.Id).Select(a => a.Rating).DefaultIfEmpty(0).Min();
+                int currentPassingScore = abiturientList.Where(a => a.CurrentMajor == major.Id).Select(a => a.Rating).DefaultIfEmpty(0).Min();
 
                 majorStatistics.Add(new MajorStatistics(
                     major,

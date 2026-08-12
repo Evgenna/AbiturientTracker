@@ -80,14 +80,14 @@ namespace Abiturients
                     {
                         currentPlace = true;
                         takingPlaces[majorId]++;
-                        abiturient.CurrentMajor = priority.Name;
+                        abiturient.CurrentMajor = priority.Id;
                     }
                     // Распределение по высшему проходному приоритету
                     if (agreementPlaces[majorId] < majorPlaces && !agreementPlace && abiturient.HasAgreement)
                     {
                         agreementPlace = true;
                         agreementPlaces[majorId]++;
-                        abiturient.AgreementMajor = priority.Name;
+                        abiturient.AgreementMajor = priority.Id;
                     }
                 }
             }
