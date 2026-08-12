@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Abiturient Tracker</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dropdown.css">
+    <link rel="stylesheet" href="css/tooltip.css">
+</head>
+
+<body>
+    <div>
+        <h1>Рейтинг абитуриентов</h1>
+        <p>Последнее обновление: <span id="last-update"></span></p>
+        <p>Данные получены из
+            <a href="https://contest.tusur.ru/#/campaigns/bachelor/postal">официальных конкурсных списков ТУСУР</a>
+        </p>
+        <select id="major-select">
+            <option value="all">По всем направлениям</option>
+        </select>
+        <div class="left" id="sort-div">
+            <div class="inline">
+                <input type="checkbox" id="hide-without-agreement">
+                <label for="hide-without-agreement">Подали согласие</label>
+            </div>
+        </div>
+        <div class="dropdown">
+            <div class="dropdown-header">Справка</div>
+            <div class="dropdown-content">
+                <h2>Общая статистика</h2>
+                <p>Абитуриентов: <span id="applicant-count"></span></p>
+                <p>Согласий: <span id="has-agreement-count"></span></p>
+                <h2>Мой рейтинг</h2>
+                <p>🏅Текущее место: <span id="my-place"></span></p>
+                <p>🎓При текущих согласиях: <span id="my-agreement-major"></span></p>
+                <p>📋Если все подадут согласие: <span id="my-major"></span></p>
+                <p>👥Впереди с согласием: <span id="my-with-agreement"></span></p>
+                <p>⚠Впереди без согласия: <span id="my-without-agreement"></span></p>
+                <h2>Статистика по направлениям</h2>
+                <div class="table-wrapper">
+                    <table id="major-statistics-table" class="simple-table">
+                        <thead>
+                            <tr>
+                                <th>Направление</th>
+                                <th>Мест</th>
+                                <th>Абитуриентов</th>
+                                <th>Согласий</th>
+                                <th>Конкурс</th>
+                                <th>Проходной<br>(все)</th>
+                                <th>Проходной<br>(по согласиям)</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <div class="dropdown">
+                    <div class="dropdown-header">История изменений согласий за сегодня</div>
+                    <div class="dropdown-content">
+                        <div class="table-wrapper">
+                            <table id="agreement-history-table" class="simple-table">
+                                <thead>
+                                    <tr>
+                                        <th>Код</th>
+                                        <th>Изменение</th>
+                                        <th>Время</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+        <div class="table-wrapper">
+            <table id="applicants-table">
+                <thead>
+                    <tr id="table-header">
+                        <th>№</th>
+                        <th>Код</th>
+                        <th>Балл</th>
+                        <th>Согласие</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+
+</html>
+
+<script src="js/table.js"></script>
+<script src="js/dropdown.js"></script>
+<!-- <script src="js/tooltip.js"></script> -->
+<script src="main.js?v=3"></script>

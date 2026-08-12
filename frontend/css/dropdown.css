@@ -1,0 +1,33 @@
+.dropdown {
+    border: 1px solid #d0d0d0;
+    border-radius: 6px;
+    background: #fff;
+    overflow: hidden;
+}
+
+.dropdown-header {
+    padding: 12px 16px;
+    background: #f5f5f5;
+    cursor: pointer;
+    font-weight: 600;
+    user-select: none;
+    transition: background 0.2s;
+}
+
+.dropdown-header:hover {
+    background: #ececec;
+}
+
+.dropdown-content {
+    display: none;
+    padding: 16px;
+    border-top: 1px solid #d0d0d0;
+}
+
+.dropdown>.dropdown-content {
+    display: none;
+}
+
+.dropdown.open>.dropdown-content {
+    display: block;
+}
