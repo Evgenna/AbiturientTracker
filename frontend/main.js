@@ -257,7 +257,10 @@ function drawApplicants(list) {
 
         row.push(getMajorName(majorId));
 
-        const tr = table.insertRow(row);
+        const tr = table.insertRow(
+            row,
+            applicant.uid === rating.statistics.myStatistic.myUid
+        );
 
         tr.id = `uid-${applicant.uid}`;
     });
@@ -269,24 +272,22 @@ function drawApplicants(list) {
 // ==============================
 
 function applyFilters() {
-
     let list = rating.abiturients;
 
-    // Только абитуриенты с согласием
     if (hideWithoutAgreement) {
         list = list.filter(
             applicant => applicant.hasAgreement
         );
     }
 
-    // Выбранное направление
     if (selectedMajor !== "all") {
-        list = list.filter(applicant =>
-            applicant.majorPriorities.some(
-                priority =>
-                    priority.id === selectedMajor
-            )
-        );
+        list = list.filter(applicant => {
+            const majorId = hideWithoutAgreement
+                ? applicant.agreementMajor
+                : applicant.currentMajor;
+
+            return majorId === selectedMajor;
+        });
     }
 
     list = sortApplicants(list);

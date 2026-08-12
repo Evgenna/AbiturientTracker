@@ -16,11 +16,12 @@ namespace Statistics
             int withoutAgreement = abiturientsForward.Count(a => !a.HasAgreement);
 
             return new MyStatistics(
+                myId,
                 place + 1,
                 currentMajor,
                 agreementMajor,
-                withAgreement,
-                withoutAgreement
+                withoutAgreement,
+                withAgreement
             );
         }
 
