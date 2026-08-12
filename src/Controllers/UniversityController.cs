@@ -1,5 +1,6 @@
 using Abiturients;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 
 namespace University
 {
@@ -21,6 +22,11 @@ namespace University
         {
             var abiturientList = await _universityProxy.GetAbiturients();
             var abiturients = DistributionService.Prepare(abiturientList);
+
+            var majors = abiturientList.Select(a => a.Major).ToList();
+
+            abiturients = DistributionService.Distribute(abiturients, majors);
+
             return Ok(abiturients);
         }
     }
