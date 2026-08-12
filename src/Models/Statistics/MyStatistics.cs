@@ -1,5 +1,3 @@
-using Majors;
-
 namespace Statistics
 {
     /// <summary>

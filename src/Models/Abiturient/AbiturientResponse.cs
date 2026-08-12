@@ -1,7 +1,5 @@
 using System.Text.Json.Serialization;
 
-using Majors;
-
 namespace Abiturients
 {
     /// <summary>

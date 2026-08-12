@@ -1,14 +1,16 @@
 using Abiturients;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
+using Settings;
 
 namespace University
 {
     [ApiController]
     [Route("[controller]")]
-    public class UniversityController(UniversityProxy universityProxy) : ControllerBase
+    public class UniversityController(UniversityProxy universityProxy, SettingsService settingsService, DistributionService distributionService) : ControllerBase
     {
         private readonly UniversityProxy _universityProxy = universityProxy;
+        private readonly SettingsService _settingsService = settingsService;
+        private readonly DistributionService _distributionService = distributionService;
 
         [HttpGet("majors")]
         public async Task<IActionResult> GetMajors()
@@ -16,17 +18,16 @@ namespace University
             var majors = await _universityProxy.GetMajors();
             return Ok(majors);
         }
-        [HttpGet("abiturients")]
-        public async Task<IActionResult> GetAbiturients()
+
+        [HttpGet("rating")]
+        public async Task<IActionResult> GetRating()
         {
-            var abiturientList = await _universityProxy.GetAbiturients();
-            var abiturients = DistributionService.Prepare(abiturientList);
+            var universityData = await _universityProxy.GetAbiturients();
+            var myData = await _settingsService.LoadAsync();
 
-            var majors = abiturientList.Select(a => a.Major).ToList();
+            var rating = _distributionService.GetRating(universityData, myData.Uid);
 
-            abiturients = DistributionService.Distribute(abiturients, majors);
-
-            return Ok(abiturients);
+            return Ok(rating);
         }
     }
 }

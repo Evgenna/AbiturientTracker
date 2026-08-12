@@ -1,6 +1,5 @@
 using Abiturients;
 using Majors;
-using Settings;
 using University;
 
 namespace Statistics
@@ -42,7 +41,7 @@ namespace Statistics
                 int currentPassingScore = abiturientList.Where(a => a.CurrentMajor == major.Id).Select(a => a.Rating).DefaultIfEmpty(0).Min();
 
                 majorStatistics.Add(new MajorStatistics(
-                    major,
+                    major.Id,
                     abiturientCount,
                     agreementCount,
                     contest,
