@@ -1,10 +1,12 @@
 using Majors;
+using Statistics;
 using University;
 
 namespace Abiturients
 {
-    public class DistributionService
+    public class DistributionService(StatisticsService statisticsService)
     {
+        private readonly StatisticsService _statisticsService = statisticsService;
         /// <summary>
         /// Объединяет данные об абитуриентах и формирует список их приоритетов
         /// </summary>
@@ -98,6 +100,18 @@ namespace Abiturients
                 }
             }
             return abiturientList;
+        }
+
+        public RatingResponse GetRating(List<UniversityData> universityData, string uid)
+        {
+            var abiturients = Prepare(universityData);
+            var majors = universityData.Select(a => a.Major).ToList();
+
+            abiturients = Distribute(abiturients, majors);
+
+            var statistics = _statisticsService.GetStatistics(uid, universityData);
+
+            return new RatingResponse(majors, abiturients, statistics);
         }
     }
 }
