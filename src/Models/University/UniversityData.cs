@@ -4,7 +4,7 @@ using Majors;
 namespace University
 {
     public record UniversityData(
-        MajorDetails Major,
+        Major Major,
         List<AbiturientResponse> Abiturients
     );
 }

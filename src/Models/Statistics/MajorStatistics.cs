@@ -3,7 +3,7 @@ using Majors;
 namespace Statistics
 {
     public record MajorStatistics(
-        MajorDetails Major, 
+        Major Major, 
         int AbiturientCount, 
         int AgreementCount, 
         double Contest, 

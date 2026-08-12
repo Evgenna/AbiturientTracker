@@ -31,7 +31,7 @@ namespace Statistics
 
             foreach (var data in universityData)
             {
-                MajorDetails major = data.Major;
+                Major major = data.Major;
                 List<AbiturientResponse> abiturients = data.Abiturients;
                 int abiturientCount = abiturients.Count();
                 int agreementCount = abiturients.Count(a => a.HasAgreement);

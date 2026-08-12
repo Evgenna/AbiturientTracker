@@ -51,9 +51,9 @@ namespace University
             return JsonDocument.Parse(json);
         }
 
-        public async Task<List<MajorSummary>> GetMajors()
+        public async Task<List<Major>> GetMajors()
         {
-            List<MajorSummary> majorList = new List<MajorSummary> { };
+            List<Major> majorList = new List<Major> { };
             foreach (string campaign in _universityConfiguration.Campaigns)
             {
                 using var json = await SendRequest($"{_universityConfiguration.BaseUrl}/{campaign}",
@@ -61,7 +61,7 @@ namespace University
 
                 var root = json.RootElement;
 
-                var majors = root.GetProperty("contest_groups").Deserialize<List<MajorSummary>>();
+                var majors = root.GetProperty("contest_groups").Deserialize<List<Major>>();
 
                 if (majors == null) continue;
 
@@ -85,7 +85,7 @@ namespace University
 
                 var contestGroup = json.RootElement.GetProperty("contest_group");
 
-                var majorDetail = contestGroup.Deserialize<MajorDetails>();
+                var majorDetail = contestGroup.Deserialize<Major>();
 
                 var abiturients = contestGroup.GetProperty("abiturients").Deserialize<List<AbiturientResponse>>();
                 if(abiturients == null) continue;

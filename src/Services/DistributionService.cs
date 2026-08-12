@@ -41,13 +41,13 @@ namespace Abiturients
         /// <param name="abiturients">Список абитуриентов</param>
         /// <param name="majorDetails">Список специальностей</param>
         /// <returns>Список абитуриентов с назначенными специальностями</returns>
-        public static List<Abiturient> Distribute(List<Abiturient> abiturients, List<MajorDetails> majorDetails)
+        public static List<Abiturient> Distribute(List<Abiturient> abiturients, List<Major> majorDetails)
         {
             var abiturientList = abiturients.Select(a => new Abiturient(a)).ToList();
 
             var takingPlaces = new Dictionary<string, int>(); // Места на основной высший приоритет
             var agreementPlaces = new Dictionary<string, int>(); // Места на высший проходной приоритет
-            foreach (MajorDetails major in majorDetails)
+            foreach (Major major in majorDetails)
             {
                 takingPlaces[major.Id] = 0;
                 agreementPlaces[major.Id] = 0;
