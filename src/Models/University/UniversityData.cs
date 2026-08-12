@@ -3,8 +3,13 @@ using Majors;
 
 namespace University
 {
+    /// <summary>
+    /// Данные, полученные от университета
+    /// </summary>
+    /// <param name="Major">Специальность и инфомация о ней</param>
+    /// <param name="Abiturients">Абитуриенты, участвующие в конкурсном списке</param>
     public record UniversityData(
-        MajorDetails Major,
+        Major Major,
         List<AbiturientResponse> Abiturients
     );
 }

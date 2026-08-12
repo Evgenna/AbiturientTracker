@@ -5,6 +5,11 @@ namespace Abiturients
 {
     public class DistributionService
     {
+        /// <summary>
+        /// Объединяет данные об абитуриентах и формирует список их приоритетов
+        /// </summary>
+        /// <param name="universityData">Данные о специальностях их абитуриентах</param>
+        /// <returns>Список уникальных абитуриентов с их приоритетами</returns>
         public static List<Abiturient> Prepare(List<UniversityData> universityData)
         {
             var abiturients = new Dictionary<string, Abiturient>();
@@ -14,6 +19,7 @@ namespace Abiturients
                 var major = data.Major;
                 foreach (var abiturient in data.Abiturients)
                 {
+                    // Если абитуриент еще не встречался, добавим в список
                     if (!abiturients.TryGetValue(abiturient.Uid, out var a))
                     {
                         a = new Abiturient
@@ -25,9 +31,9 @@ namespace Abiturients
 
                         abiturients[abiturient.Uid] = a;
                     }
-
+                    // Добавляет абитуриенту новый приоритет
                     a.MajorPriorities.Add(
-                        new MajorPriority(major.Id, major.Name, abiturient.Priority)
+                        new MajorPriority(major.Id, abiturient.Priority)
                     );
                 }
             }
@@ -41,13 +47,13 @@ namespace Abiturients
         /// <param name="abiturients">Список абитуриентов</param>
         /// <param name="majorDetails">Список специальностей</param>
         /// <returns>Список абитуриентов с назначенными специальностями</returns>
-        public static List<Abiturient> Distribute(List<Abiturient> abiturients, List<MajorDetails> majorDetails)
+        public static List<Abiturient> Distribute(List<Abiturient> abiturients, List<Major> majorDetails)
         {
             var abiturientList = abiturients.Select(a => new Abiturient(a)).ToList();
 
             var takingPlaces = new Dictionary<string, int>(); // Места на основной высший приоритет
             var agreementPlaces = new Dictionary<string, int>(); // Места на высший проходной приоритет
-            foreach (MajorDetails major in majorDetails)
+            foreach (Major major in majorDetails)
             {
                 takingPlaces[major.Id] = 0;
                 agreementPlaces[major.Id] = 0;
@@ -80,14 +86,14 @@ namespace Abiturients
                     {
                         currentPlace = true;
                         takingPlaces[majorId]++;
-                        abiturient.CurrentMajor = priority.Name;
+                        abiturient.CurrentMajor = priority.Id;
                     }
                     // Распределение по высшему проходному приоритету
                     if (agreementPlaces[majorId] < majorPlaces && !agreementPlace && abiturient.HasAgreement)
                     {
                         agreementPlace = true;
                         agreementPlaces[majorId]++;
-                        abiturient.AgreementMajor = priority.Name;
+                        abiturient.AgreementMajor = priority.Id;
                     }
                 }
             }

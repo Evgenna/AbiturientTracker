@@ -8,6 +8,9 @@ using Abiturients;
 
 namespace University
 {
+    /// <summary>
+    /// Получает и преобразует данные сервера
+    /// </summary>
     public class UniversityProxy(
         IHttpClientFactory httpClientFactory,
         IMemoryCache memoryCache,
@@ -20,6 +23,7 @@ namespace University
         private readonly UniversityConfiguration _universityConfiguration = universityOptions.Value;
         private readonly SettingsConfiguration _settingsConfiguration = abiturientOptions.Value;
 
+        // Получает данные из тестового файла или внешнего API с кэшированием.
         private async Task<JsonDocument> SendRequest(string link, string? testPath = null)
         {
             string json;
@@ -51,9 +55,12 @@ namespace University
             return JsonDocument.Parse(json);
         }
 
-        public async Task<List<MajorSummary>> GetMajors()
+        /// <summary>
+        /// Информация о всех специальностях университета
+        /// </summary>
+        public async Task<List<Major>> GetMajors()
         {
-            List<MajorSummary> majorList = new List<MajorSummary> { };
+            List<Major> majorList = [];
             foreach (string campaign in _universityConfiguration.Campaigns)
             {
                 using var json = await SendRequest($"{_universityConfiguration.BaseUrl}/{campaign}",
@@ -61,7 +68,7 @@ namespace University
 
                 var root = json.RootElement;
 
-                var majors = root.GetProperty("contest_groups").Deserialize<List<MajorSummary>>();
+                var majors = root.GetProperty("contest_groups").Deserialize<List<Major>>();
 
                 if (majors == null) continue;
 
@@ -73,6 +80,9 @@ namespace University
             return majorList;
         }
 
+        /// <summary>
+        /// Получает данные об абитуриентах по выбранным пользователем специальностям из конфигурации
+        /// </summary>
         public async Task<List<UniversityData>> GetAbiturients()
         {
             var universityData = new List<UniversityData>();
@@ -85,7 +95,7 @@ namespace University
 
                 var contestGroup = json.RootElement.GetProperty("contest_group");
 
-                var majorDetail = contestGroup.Deserialize<MajorDetails>();
+                var majorDetail = contestGroup.Deserialize<Major>();
 
                 var abiturients = contestGroup.GetProperty("abiturients").Deserialize<List<AbiturientResponse>>();
                 if(abiturients == null) continue;

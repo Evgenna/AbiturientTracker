@@ -1,4 +1,4 @@
 namespace Majors
 {
-    public record MajorPriority(string Id, string Name, int Priority);
+    public record MajorPriority(string Id, int Priority);
 }

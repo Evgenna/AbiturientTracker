@@ -6,10 +6,9 @@ namespace University
 {
     [ApiController]
     [Route("[controller]")]
-    public class UniversityController(UniversityProxy universityProxy, DistributionService distributionService) : ControllerBase
+    public class UniversityController(UniversityProxy universityProxy) : ControllerBase
     {
         private readonly UniversityProxy _universityProxy = universityProxy;
-        private readonly DistributionService _distributionService = distributionService;
 
         [HttpGet("majors")]
         public async Task<IActionResult> GetMajors()

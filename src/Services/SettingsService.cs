@@ -3,10 +3,16 @@ using Majors;
 
 namespace Settings
 {
+    /// <summary>
+    /// Сервис для загрузки и сохранения пользоватльской конфигурации
+    /// </summary>
     public class SettingsService
     {
         private const string FileName = "config.json";
 
+        /// <summary>
+        /// Загружает пользовательскую конфигурацию из файла
+        /// </summary>
         public async Task<SettingsConfiguration> LoadAsync()
         {
             if (!File.Exists(FileName))
@@ -22,6 +28,10 @@ namespace Settings
                 }) ?? new SettingsConfiguration();
         }
 
+        /// <summary>
+        /// Сохраняет пользовательскую конфигурацию в файл
+        /// </summary>
+        /// <param name="settingsConfiguration">Конфигурация для сохранения</param>
         public async Task SaveAsync(SettingsConfiguration settingsConfiguration)
         {
             var json = JsonSerializer.Serialize(settingsConfiguration,
