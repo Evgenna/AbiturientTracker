@@ -4,6 +4,9 @@ using Majors;
 
 namespace Abiturients
 {
+    /// <summary>
+    /// Обработчик ответа с данными об абитуриенте
+    /// </summary>
     public class AbiturientResponse
     {
         [JsonPropertyName("sspvo_unique_code")]

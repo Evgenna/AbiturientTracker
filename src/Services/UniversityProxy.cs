@@ -8,6 +8,9 @@ using Abiturients;
 
 namespace University
 {
+    /// <summary>
+    /// Получает и преобразует данные сервера
+    /// </summary>
     public class UniversityProxy(
         IHttpClientFactory httpClientFactory,
         IMemoryCache memoryCache,
@@ -20,6 +23,7 @@ namespace University
         private readonly UniversityConfiguration _universityConfiguration = universityOptions.Value;
         private readonly SettingsConfiguration _settingsConfiguration = abiturientOptions.Value;
 
+        // Получает данные из тестового файла или внешнего API с кэшированием.
         private async Task<JsonDocument> SendRequest(string link, string? testPath = null)
         {
             string json;
@@ -51,9 +55,12 @@ namespace University
             return JsonDocument.Parse(json);
         }
 
+        /// <summary>
+        /// Информация о всех специальностях университета
+        /// </summary>
         public async Task<List<Major>> GetMajors()
         {
-            List<Major> majorList = new List<Major> { };
+            List<Major> majorList = [];
             foreach (string campaign in _universityConfiguration.Campaigns)
             {
                 using var json = await SendRequest($"{_universityConfiguration.BaseUrl}/{campaign}",
@@ -73,6 +80,9 @@ namespace University
             return majorList;
         }
 
+        /// <summary>
+        /// Получает данные об абитуриентах по выбранным пользователем специальностям из конфигурации
+        /// </summary>
         public async Task<List<UniversityData>> GetAbiturients()
         {
             var universityData = new List<UniversityData>();

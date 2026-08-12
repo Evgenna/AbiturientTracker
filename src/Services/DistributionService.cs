@@ -5,6 +5,11 @@ namespace Abiturients
 {
     public class DistributionService
     {
+        /// <summary>
+        /// Объединяет данные об абитуриентах и формирует список их приоритетов
+        /// </summary>
+        /// <param name="universityData">Данные о специальностях их абитуриентах</param>
+        /// <returns>Список уникальных абитуриентов с их приоритетами</returns>
         public static List<Abiturient> Prepare(List<UniversityData> universityData)
         {
             var abiturients = new Dictionary<string, Abiturient>();
@@ -14,6 +19,7 @@ namespace Abiturients
                 var major = data.Major;
                 foreach (var abiturient in data.Abiturients)
                 {
+                    // Если абитуриент еще не встречался, добавим в список
                     if (!abiturients.TryGetValue(abiturient.Uid, out var a))
                     {
                         a = new Abiturient
@@ -25,9 +31,9 @@ namespace Abiturients
 
                         abiturients[abiturient.Uid] = a;
                     }
-
+                    // Добавляет абитуриенту новый приоритет
                     a.MajorPriorities.Add(
-                        new MajorPriority(major.Id, major.Name, abiturient.Priority)
+                        new MajorPriority(major.Id, abiturient.Priority)
                     );
                 }
             }
