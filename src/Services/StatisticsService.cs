@@ -7,13 +7,12 @@ namespace Statistics
 {
     public class StatisticsService()
     {
-
-        public MyStatistics GetMyStatistics(string myId, List<Abiturient> _abiturients)
+        public MyStatistics GetMyStatistics(string myId, List<Abiturient> abiturients)
         {
-            int place = _abiturients.FindIndex(a => a.Uid == myId);
-            string currentMajor = "";
-            string agreementMajor = "";
-            var abiturientsForward = _abiturients.Slice(0, place).ToList();
+            int place = abiturients.FindIndex(a => a.Uid == myId);
+            string? currentMajor = abiturients[place].CurrentMajor;
+            string? agreementMajor = abiturients[place].AgreementMajor;
+            var abiturientsForward = abiturients.Take(place).ToList();
             int withAgreement = abiturientsForward.Count(a => a.HasAgreement);
             int withoutAgreement = abiturientsForward.Count(a => !a.HasAgreement);
 
@@ -26,7 +25,7 @@ namespace Statistics
             );
         }
 
-        public List<MajorStatistics> GetMajorStatistics(List<UniversityData> universityData)
+        public List<MajorStatistics> GetMajorStatistics(List<UniversityData> universityData, List<Abiturient> abiturientList)
         {
             List<MajorStatistics> majorStatistics = [];
 
@@ -36,15 +35,19 @@ namespace Statistics
                 List<AbiturientResponse> abiturients = data.Abiturients;
                 int abiturientCount = abiturients.Count();
                 int agreementCount = abiturients.Count(a => a.HasAgreement);
-                double contest = abiturientCount / major.Places;
+                double contest = (double)abiturientCount / major.Places;
+
+                // Проходные баллы для специальности по основному и проходному приоритетам
+                int agreementPassingScore = abiturientList.Where(a => a.AgreementMajor == major.Name).Select(a => a.Rating).DefaultIfEmpty(0).Min();
+                int currentPassingScore = abiturientList.Where(a => a.CurrentMajor == major.Name).Select(a => a.Rating).DefaultIfEmpty(0).Min();
 
                 majorStatistics.Add(new MajorStatistics(
                     major,
                     abiturientCount,
                     agreementCount,
                     contest,
-                    0,
-                    0
+                    agreementPassingScore,
+                    currentPassingScore
                 ));
             }
 
@@ -53,12 +56,12 @@ namespace Statistics
 
         public StatisticsResponse GetStatistics(string myId, List<UniversityData> universityData)
         {
-
-            MyStatistics myStatistics = GetMyStatistics(myId, DistributionService.Prepare(universityData));
-            List<MajorStatistics> majorStatistics = GetMajorStatistics(universityData);
+            var abiturients = DistributionService.Distribute(DistributionService.Prepare(universityData), [.. universityData.Select(u => u.Major)]);
+            MyStatistics myStatistics = GetMyStatistics(myId, abiturients);
+            List<MajorStatistics> majorStatistics = GetMajorStatistics(universityData, abiturients);
             return new StatisticsResponse(
-                0,
-                0,
+                abiturients.Count(),
+                abiturients.Count(a => a.HasAgreement),
                 myStatistics,
                 majorStatistics
             );
